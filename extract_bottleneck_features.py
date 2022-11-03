@@ -1,10 +1,10 @@
 """ """
 
+from keras.applications.inception_v3 import InceptionV3, preprocess_input
+from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input
 from keras.applications.vgg16 import VGG16, preprocess_input
 from keras.applications.vgg19 import VGG19, preprocess_input
-from keras.applications.resnet50 import ResNet50, preprocess_input
 from keras.applications.xception import Xception, preprocess_input
-from keras.applications.inception_v3 import InceptionV3, preprocess_input
 
 
 def extract_VGG16(tensor):
