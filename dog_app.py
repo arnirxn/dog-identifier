@@ -14,7 +14,7 @@ from helpers.app_utils import (
 
 def display_welcome():
     """Display title, subheader and body message of the app."""
-    st.title("Dog Identifier App", anchor=None)
+    st.title("Dog Identifier App :dog:")
 
     st.subheader(
         "Find out which breed a dog or person resembles most",
@@ -34,8 +34,6 @@ def display_welcome():
         """
     )
 
-    st.write("")
-
 
 def run_app():
     """Run the streamlit web app."""
@@ -50,6 +48,8 @@ def run_app():
     )
 
     if uploaded_image:
+
+    with st.spinner(text="Looking for a dog or human in your picture :eyes:"):
 
         dir_path = Path(".temp")
         image_path = str(dir_path / uploaded_image.name)
@@ -80,7 +80,9 @@ def run_app():
             )
 
         else:
-            with st.spinner(text="Predicting what breed this looks like ..."):
+            with st.spinner(
+                    text="Predicting what breed this looks like :crystal_ball:"
+            ):
 
                 # Get Xception model
                 Xception_model = get_model()
@@ -95,8 +97,12 @@ def run_app():
                 article = "an" if prediction[0].lower() == "a" else "a"
                 breed = prediction.replace("_", " ").title()
 
+            st.write("Done :white_check_mark:")
             st.success(f"This {subject} picture looks like {article} {breed}!")
             st.image(uploaded_image, use_column_width=True)
+
+            st.write(" ")
+            st.subheader("Was it fun? Try uploading a new picture :raised_hands:")
 
 
 if __name__ == "__main__":

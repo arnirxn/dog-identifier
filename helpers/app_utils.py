@@ -4,8 +4,8 @@ import cv2
 import numpy as np
 from keras.layers import Dense, GlobalAveragePooling2D
 from keras.models import Sequential
-from tensorflow.keras.applications.resnet50 import preprocess_input, ResNet50
-from tensorflow.keras.applications.xception import preprocess_input, Xception
+from tensorflow.keras.applications import resnet50
+from tensorflow.keras.applications import xception
 from tensorflow.keras.utils import img_to_array, load_img
 
 
@@ -59,9 +59,9 @@ def predict_breed_with_Xception(img_path, model, verbose=1):
     tensor = image_to_tensor(img_path)
 
     # Extract bottleneck features
-    bottleneck_feature = Xception(weights="imagenet", include_top=False).predict(
-        preprocess_input(tensor), verbose=0
-    )
+    bottleneck_feature = xception.Xception(
+        weights="imagenet", include_top=False
+    ).predict(xception.preprocess_input(tensor), verbose=0)
 
     # Obtain predicted vector
     predicted_vector = model.predict(bottleneck_feature, verbose=verbose)
@@ -104,10 +104,10 @@ def dog_detected_Resnet50(image_path):
     :rtype: bool
     """
 
-    img = preprocess_input(image_to_tensor(image_path))
+    img = resnet50.preprocess_input(image_to_tensor(image_path))
 
     # define ResNet50 model
-    ResNet50_model = ResNet50(weights="imagenet")
+    ResNet50_model = resnet50.ResNet50(weights="imagenet")
 
     # returns prediction vector for image located at img_path
     prediction = np.argmax(ResNet50_model.predict(img, verbose=0))
