@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import cv2
 import numpy as np
 from keras.layers import Dense, GlobalAveragePooling2D
@@ -12,19 +14,20 @@ def get_dog_names():
     return
 
 
-def bottleneck_features():
-    return np.load("bottleneck_features/DogXceptionData.npz")
+# def bottleneck_features():
+#     return np.load("bottleneck_features/DogXceptionData.npz")
+#
 
 
 def get_model():
-    # Obtain bottleneck features from another pre-trained CNN
-    bottleneck_features = bottleneck_features()
 
     # Define architecture
     Xception_model = Sequential()
-    Xception_model.add(GlobalAveragePooling2D(input_shape=train_Xception.shape[1:]))
+    Xception_model.add(GlobalAveragePooling2D(input_shape=(7, 7, 2048)))
     Xception_model.add(Dense(133, activation="softmax"))
-    Xception_model.summary()
+
+    # Load the model weights
+    Xception_model.load_weights("saved_models/weights.best.Xception.hdf5")
 
     return Xception_model
 
@@ -65,6 +68,9 @@ def predict_breed_with_Xception(img_path, model, verbose=1):
     predicted_vector = model.predict(bottleneck_feature, verbose=verbose)
 
     # Get dog breed that is predicted by the model
+    with open(Path("helpers", "dog_names.txt"), "r") as f:
+        dog_names = f.read().splitlines()
+
     predicted_dog_breed = dog_names[np.argmax(predicted_vector)]
 
     return predicted_dog_breed
