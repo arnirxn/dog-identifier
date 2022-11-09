@@ -8,6 +8,7 @@ from helpers.app_utils import (
     dog_detected_Resnet50,
     get_faces,
     predict_breed_with_Xception,
+    get_model,
 )
 
 
@@ -16,7 +17,7 @@ def display_welcome():
     st.title("Dog Identifier App", anchor=None)
 
     st.subheader(
-        "An app to tell you which breed your dog is or which dog you most resemble.",
+        "Find out which breed a dog or person resembles most",
         anchor=None,
     )
 
@@ -29,7 +30,7 @@ def display_welcome():
         Cool, right? But it even better: You can also upload a picture of a person and 
         we will tell you which dog breed this person most resembles.
 
-        Try it out, just upload an image below and see for yourself!
+        Try it out, just upload an image of a dog or person below and see for yourself!
         """
     )
 
@@ -42,25 +43,31 @@ def run_app():
     display_welcome()
 
     uploaded_image = st.file_uploader(
-        "Upload your image here",
+        "",
         type=["png", "jpg", "jpeg"],
         accept_multiple_files=False,
         help="Upload an image of a dog or a person.",
     )
 
+    Xception_model = get_model()
+
     if uploaded_image:
 
-        image_path = Path("app", "temp", uploaded_image.name)
-        image_path.mkdir(parents=True, exist_ok=True)
+        dir_path = Path(".temp")
+        image_path = str(dir_path / uploaded_image.name)
+
+        # Create directory
+        dir_path.mkdir(parents=True, exist_ok=True)
+
         # Write image locally
         with open(image_path, "wb") as f:
             f.write(uploaded_image.getbuffer())
 
         # Get faces
-        num_faces = len(get_faces(str(image_path)))
+        num_faces = len(get_faces(image_path))
 
         # Check if dogs are detected
-        dog_detected = dog_detected_Resnet50(str(image_path))
+        dog_detected = dog_detected_Resnet50(image_path)
 
         # Check more than one face is detected
         if num_faces > 1:
@@ -78,7 +85,9 @@ def run_app():
 
             # Predict dog breed using Xception
             st.write("Predicting what breed this looks like ...")
-            prediction = predict_breed_with_Xception(str(image_path), verbose=0)
+            prediction = predict_breed_with_Xception(
+                image_path, model=Xception_model, verbose=0
+            )
 
             subject = "dog" if dog_detected else "human"
             subject = "human/dog" if dog_detected and num_faces else subject
