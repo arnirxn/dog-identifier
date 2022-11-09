@@ -4,6 +4,17 @@
 [image2]: ./images/vgg16_model.png "VGG-16 Model Keras Layers"
 [image3]: ./images/vgg16_model_draw.png "VGG16 Model Figure"
 
+## Dog Identifier App
+### How do I run the dog identifier app? 
+Install the necessary packages with:
+```
+pip install -r requirements/requirements.txt
+```
+Then all you have to do, is start the web app by running:
+```
+streamlit run dog_app.py
+```
+Have fun!
 
 ## Project Overview
 

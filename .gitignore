@@ -130,3 +130,5 @@ dmypy.json
 /bottleneck_features/
 /dogImages/
 /lfw/
+/.temp/
+/test_images/
