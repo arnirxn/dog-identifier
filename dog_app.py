@@ -7,7 +7,8 @@ from PIL import Image
 from app_utils import dog_detected_Resnet50, get_faces, predict_breed_with_Xception
 
 
-def run_app():
+def display_welcome():
+    """Display title, subheader and body message of the app."""
     st.title("Dog Identifier App", anchor=None)
 
     st.subheader(
@@ -20,16 +21,18 @@ def run_app():
         Have you ever taken a picture of a cute dog you saw on the streets and wondered 
         what breed it might be? Now you can easily identify the dogs breed by uploading 
         an image of the dog below and we'll tell you what breed it might be. 
-        
+
         Cool, right? But it even better: You can also upload a picture of a person and 
         we will tell you which dog breed this person most resembles.
-         
+
         Try it out, just upload an image below and see for yourself!
         """
     )
 
     st.write("")
-    st.write("")
+
+
+def run_app():
 
     uploaded_image = st.file_uploader(
         "Upload your image here",
