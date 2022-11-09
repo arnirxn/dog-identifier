@@ -37,6 +37,9 @@ def display_welcome():
 
 
 def run_app():
+    """Run the streamlit web app."""
+
+    display_welcome()
 
     uploaded_image = st.file_uploader(
         "Upload your image here",

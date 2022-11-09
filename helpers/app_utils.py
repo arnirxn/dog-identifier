@@ -5,21 +5,15 @@ import numpy as np
 from keras.layers import Dense, GlobalAveragePooling2D
 from keras.models import Sequential
 from tensorflow.keras.applications.resnet50 import preprocess_input, ResNet50
+from tensorflow.keras.applications.xception import preprocess_input, Xception
 from tensorflow.keras.utils import img_to_array, load_img
-
-from extract_bottleneck_features import extract_Xception
-
-
-def get_dog_names():
-    return
-
-
-# def bottleneck_features():
-#     return np.load("bottleneck_features/DogXceptionData.npz")
-#
 
 
 def get_model():
+    """
+    Builds a sequential model and loads pre-trained Xception weights on it.
+    :return: Xception model
+    """
 
     # Define architecture
     Xception_model = Sequential()
@@ -61,8 +55,13 @@ def predict_breed_with_Xception(img_path, model, verbose=1):
     :return: Name of the predicted breed
     """
 
+    # Transform image to 4-D tensor
+    tensor = image_to_tensor(img_path)
+
     # Extract bottleneck features
-    bottleneck_feature = extract_Xception(image_to_tensor(img_path), verbose=verbose)
+    bottleneck_feature = Xception(weights="imagenet", include_top=False).predict(
+        preprocess_input(tensor), verbose=0
+    )
 
     # Obtain predicted vector
     predicted_vector = model.predict(bottleneck_feature, verbose=verbose)
