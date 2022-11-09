@@ -49,23 +49,23 @@ def run_app():
 
     if uploaded_image:
 
-    with st.spinner(text="Looking for a dog or human in your picture :eyes:"):
+        with st.spinner(text="Looking for a dog or human in your picture :eyes:"):
 
-        dir_path = Path(".temp")
-        image_path = str(dir_path / uploaded_image.name)
+            dir_path = Path(".temp")
+            image_path = str(dir_path / uploaded_image.name)
 
-        # Create directory
-        dir_path.mkdir(parents=True, exist_ok=True)
+            # Create directory
+            dir_path.mkdir(parents=True, exist_ok=True)
 
-        # Write image locally
-        with open(image_path, "wb") as f:
-            f.write(uploaded_image.getbuffer())
+            # Write image locally
+            with open(image_path, "wb") as f:
+                f.write(uploaded_image.getbuffer())
 
-        # Get faces
-        num_faces = len(get_faces(image_path))
+            # Get faces
+            num_faces = len(get_faces(image_path))
 
-        # Check if dogs are detected
-        dog_detected = dog_detected_Resnet50(image_path)
+            # Check if dogs are detected
+            dog_detected = dog_detected_Resnet50(image_path)
 
         # Check more than one face is detected
         if num_faces > 1:
@@ -81,7 +81,7 @@ def run_app():
 
         else:
             with st.spinner(
-                    text="Predicting what breed this looks like :crystal_ball:"
+                text="Predicting what breed this looks like :crystal_ball:"
             ):
 
                 # Get Xception model
