@@ -43,13 +43,11 @@ def run_app():
     display_welcome()
 
     uploaded_image = st.file_uploader(
-        "",
+        " ",
         type=["png", "jpg", "jpeg"],
         accept_multiple_files=False,
         help="Upload an image of a dog or a person.",
     )
-
-    Xception_model = get_model()
 
     if uploaded_image:
 
@@ -82,17 +80,20 @@ def run_app():
             )
 
         else:
+            with st.spinner(text="Predicting what breed this looks like ..."):
 
-            # Predict dog breed using Xception
-            st.write("Predicting what breed this looks like ...")
-            prediction = predict_breed_with_Xception(
-                image_path, model=Xception_model, verbose=0
-            )
+                # Get Xception model
+                Xception_model = get_model()
 
-            subject = "dog" if dog_detected else "human"
-            subject = "human/dog" if dog_detected and num_faces else subject
-            article = "an" if prediction[0].lower() == "a" else "a"
-            breed = prediction.replace("_", " ").title()
+                # Predict dog breed using Xception
+                prediction = predict_breed_with_Xception(
+                    image_path, model=Xception_model, verbose=0
+                )
+
+                subject = "dog" if dog_detected else "human"
+                subject = "human/dog" if dog_detected and num_faces else subject
+                article = "an" if prediction[0].lower() == "a" else "a"
+                breed = prediction.replace("_", " ").title()
 
             st.success(f"This {subject} picture looks like {article} {breed}!")
             st.image(uploaded_image, use_column_width=True)
